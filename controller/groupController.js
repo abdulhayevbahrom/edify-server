@@ -15,12 +15,19 @@ class GroupController {
   // create
   async createGroup(req, res) {
     try {
+      let exactGroup = await GroupDB.findOne({ name: req.body.name });
+      if (exactGroup)
+        return response.warning(
+          res,
+          `${exactGroup.name} already exists, please choose another name`,
+          exactGroup
+        );
       const newGroup = await GroupDB.create({
         ...req.body,
         edu_id: req.edu.id,
       });
       if (!newGroup) return response.error(res, "Group not created", newGroup);
-      response.success(res, "Group created", newGroup);
+      response.created(res, "Group created", newGroup);
     } catch (error) {
       response.serverError(res, error.message, error);
     }

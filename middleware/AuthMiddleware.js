@@ -1,7 +1,8 @@
 const response = require("../utils/response");
 const jwt = require("jsonwebtoken");
+const EduDb = require("../models/educationsModel");
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   try {
     let path = req.originalUrl;
 
@@ -14,6 +15,9 @@ const auth = (req, res, next) => {
     let result = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     if (!result) return response.unauthorized(res, "invalid token");
+
+    let exactEdu = await EduDb.findOne({ _id: result.id });
+    if (!exactEdu) return response.forbidden(res);
 
     req.edu = result;
     next();

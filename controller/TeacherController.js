@@ -23,7 +23,7 @@ class TeacherController {
 
       const teacher = await TeacherDB.create(new_data);
       if (!teacher) return response.error(res, "Teacher not created");
-      response.success(res, "Teacher created", teacher);
+      response.created(res, "Teacher created", teacher);
     } catch (err) {
       response.serverError(res, err.message);
     }

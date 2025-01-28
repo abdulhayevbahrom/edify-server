@@ -7,7 +7,23 @@ class response {
     });
   }
 
+  created(res, message = "created", data = null) {
+    return res.status(201).json({
+      state: true,
+      message,
+      innerData: data,
+    });
+  }
+
   error(res, message = "error", data = null) {
+    return res.status(400).json({
+      state: false,
+      message,
+      innerData: data,
+    });
+  }
+
+  warning(res, message = "warning", data = null) {
     return res.status(400).json({
       state: false,
       message,
@@ -33,6 +49,14 @@ class response {
 
   unauthorized(res, message = "Unauthorized", data = null) {
     return res.status(401).json({
+      state: false,
+      message,
+      innerData: data,
+    });
+  }
+
+  forbidden(res, message = "Forbidden", data = null) {
+    return res.status(403).json({
       state: false,
       message,
       innerData: data,

@@ -6,17 +6,19 @@ const groupSchema = new Schema(
     capacity: { type: Number, required: true },
     group_teacher: {
       type: Object,
-      propertis: {
+      properties: {
         teacher_id: { type: String, required: true },
         teacher_name: { type: String, required: true },
       },
     },
     students: [
       {
-        student_id: { type: String, required: true },
+        student_id: { type: String },
       },
     ],
-    status: { type: Boolean, required: true },
+    room_number: { type: Number, required: true },
+    specialty: { type: String, required: true },
+    status: { type: Boolean, default: true },
     edu_id: { type: String, required: true },
   },
   {

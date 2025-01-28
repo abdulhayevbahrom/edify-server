@@ -29,7 +29,7 @@ const createEducation = async (req, res) => {
     if (!education)
       return response.error(res, "Education not created", education);
 
-    response.success(res, "Education created", education);
+    response.created(res, "Education created", education);
   } catch (error) {
     response.serverError(res, error.message);
   }

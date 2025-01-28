@@ -8,8 +8,9 @@ const groupValidation = (req, res, next) => {
   const schema = {
     type: "object",
     properties: {
-      name: { type: "string", minLength: 3, maxLength: 20 },
+      name: { type: "string", minLength: 2 },
       capacity: { type: "number", minimum: 1 },
+      room_number: { type: "number", minimum: 1 },
       group_teacher: {
         type: "object",
         properties: {
@@ -19,6 +20,7 @@ const groupValidation = (req, res, next) => {
         required: ["teacher_id", "teacher_name"],
         additionalProperties: false,
       },
+      specialty: { type: "string" },
       students: {
         type: "array",
         items: {
@@ -30,24 +32,25 @@ const groupValidation = (req, res, next) => {
           additionalProperties: false,
         },
       },
-      status: { type: "boolean" },
     },
-    required: ["name", "status", "capacity", "group_teacher", "students"],
+    required: ["name", "capacity", "group_teacher"],
     additionalProperties: false,
     errorMessage: {
       required: {
         name: "Name is required",
-        status: "Status is required",
         capacity: "Capacity is required",
         group_teacher: "Group teacher is required",
         students: "Students is required",
+        room_number: "Room number is required",
+        specialty: "Specialty is required",
       },
       properties: {
         name: "Name must be a string",
         capacity: "Capacity must be a number",
         group_teacher: "Group teacher must be an object",
         students: "Students must be an array",
-        status: "Status must be a boolean",
+        room_number: "Room number must be a number",
+        specialty: "Specialty must be a string",
       },
     },
   };
@@ -55,7 +58,7 @@ const groupValidation = (req, res, next) => {
   const validate = ajv.compile(schema);
   const valid = validate(req.body);
   if (!valid) {
-    return response.error(res, "Validation error", validate.errors);
+    return response.error(res, validate.errors[0].message, validate.errors);
   }
   next();
 };
