@@ -1,12 +1,8 @@
 const io = require("socket.io-client");
 const headers = { transports: ["websocket"] };
-const socket = io("http://localhost:8080", headers);
-
-// socket.emit("users");
-// socket.on("users", (data) => console.log(data));
+const socket = io("http://localhost:3000", headers);
 
 class SocketService {
-  // get users
   async getUsers(params) {
     return new Promise(async (resolve, reject) => {
       await socket.emit("users", params);

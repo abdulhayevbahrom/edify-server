@@ -17,6 +17,7 @@ const schema = new Schema(
     specialty: { type: String, required: true },
     salary: { type: Number, required: true, default: 0 },
     edu_id: { type: String, required: true },
+    image: { type: String },
   },
   {
     timestamps: true,

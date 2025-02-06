@@ -19,7 +19,7 @@ class messageController {
       const message = await MessageDB.create(data);
       if (!message) return response.error(res, "Message not created");
       response.created(res, "Message created", message);
-      io.emit("new_message", "yangi xabar");
+      io.emit("new_message", message);
     } catch (err) {
       return response.serverError(res, err.message);
     }

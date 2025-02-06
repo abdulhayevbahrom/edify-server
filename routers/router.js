@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const multer = require("multer");
+const upload = multer();
 
 const eduValidation = require("../validation/eduValidation");
 const eduController = require("../controller/educationsController");
@@ -23,6 +25,7 @@ router.post("/edu/login", eduController.login);
 router.get("/teacher/all", teacherController.getTeachers);
 router.post(
   "/teacher/create",
+  upload.single("image"),
   teacherValidation,
   teacherController.createTeacher
 );

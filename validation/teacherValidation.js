@@ -60,7 +60,12 @@ const teacherValidation = (req, res, next) => {
   };
 
   const validate = ajv.compile(schema);
-  const result = validate(req.body);
+  let data = JSON.parse(JSON.stringify(req.body));
+  data.socialNetworks = JSON.parse(data.socialNetworks);
+  data.phone = JSON.parse(data.phone);
+  data.salary = parseInt(data.salary);
+
+  const result = validate(data);
   if (!result) {
     return response.error(res, "Validation error", validate.errors[0].message);
   }
