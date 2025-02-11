@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
     if (!result) return response.unauthorized(res, "invalid token");
 
     let exactEdu = await EduDb.findOne({ _id: result.id });
-    if (!exactEdu) return response.forbidden(res);
+    if (!exactEdu) return response.forbidden(res, "Kirish Taqiqlanadi");
 
     req.edu = result;
     next();

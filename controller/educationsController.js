@@ -1,4 +1,5 @@
 const educationDB = require("../models/educationsModel");
+const teacherModel = require("../models/teacherModel");
 const response = require("../utils/response");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -62,36 +63,32 @@ const updateEducation = async (req, res) => {
 // login
 const login = async (req, res) => {
   try {
-    let { login, password } = req.body;
-    let exactEdu = await educationDB.findOne({ login });
-    if (!exactEdu) {
-      return response.error(res, "Login or password is incorrect");
-    }
+    const { login, password } = req.body;
 
-    let confirmPassword = await bcrypt.compare(password, exactEdu.password);
-    if (!confirmPassword) {
-      return response.error(res, "Login or password is incorrect");
-    }
+    let user =
+      (await educationDB.findOne({ login })) ||
+      (await teacherModel.findOne({ login }));
+    if (!user) return response.error(res, "Login or password is incorrect");
 
-    let token = await jwt.sign(
-      {
-        id: exactEdu._id,
-        login: exactEdu.login,
-      },
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid)
+      return response.error(res, "Login or password is incorrect");
+
+    const role = user instanceof educationDB ? "owner" : "teacher";
+    const token = jwt.sign(
+      { id: user._id, login: user.login, role },
       process.env.JWT_SECRET_KEY,
-      {
-        expiresIn: "30d",
-      }
+      { expiresIn: "30d" }
     );
+
     response.success(res, "Login successfully", {
-      edu: { ...exactEdu.toJSON() },
+      edu: { ...user.toJSON(), role },
       token,
     });
   } catch (err) {
     response.serverError(res, err.message);
   }
 };
-
 module.exports = {
   getEducations,
   createEducation,
