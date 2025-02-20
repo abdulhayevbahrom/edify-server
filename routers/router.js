@@ -14,6 +14,8 @@ const groupController = require("../controller/groupController");
 const paymentValidation = require("../validation/paymentValidation");
 const paymentController = require("../controller/paymentController");
 
+const StudentController = require("../controller/studentController");
+
 // EDUCATIONS ROUTES
 router.get("/edu/all", eduController.getEducations);
 router.post("/edu/create", eduValidation, eduController.createEducation);
@@ -59,5 +61,9 @@ router.get("/payment/today", paymentController.getPaymentsByDate);
 router.get("/payment/:year/:month", paymentController.getPaymentsByMonth);
 router.get("/payment/:id", paymentController.getPaymentByStudent);
 router.get("/payment/statistic", paymentController.getStatistic);
+
+router.get("/students", StudentController.getStudents);
+router.post("/students/create", StudentController.createStudent);
+router.post("/students/search", StudentController.searchStudents);
 
 module.exports = router;
